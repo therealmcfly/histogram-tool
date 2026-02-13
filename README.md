@@ -4,11 +4,22 @@ A set of MATLAB scripts that visualise execution time and execution cycle distri
 
 All parameters -- platform name, cutoff thresholds, bin counts, and display options -- are configured through a single `histogram.config` file. The scripts support any number of scenarios and automatically merge samples that share the same scenario name.
 
-## How to Use
+## Getting Started
 
-### 1. Prepare the `samples/` folder
+### 1. Clone the repository
 
-Create a `samples/` folder inside `histogram/` and place your CSV files in it. Each CSV must contain the following columns:
+```bash
+git clone git@github.com:therealmcfly/histogram-tool.git
+cd histogram-tool
+```
+
+### 2. Create the `samples/` folder and add your data
+
+```bash
+mkdir samples
+```
+
+Place your CSV files in `samples/`. Each CSV must contain the following columns:
 
 | Column | Required by | Description |
 |--------|-------------|-------------|
@@ -26,7 +37,7 @@ Additional columns are ignored.
 
 Files with the same prefix are combined into a single scenario.
 
-### 2. Edit `histogram.config`
+### 3. Edit `histogram.config`
 
 Set the parameters for your platform and data:
 
@@ -60,16 +71,16 @@ LOGARITHMIC_SCALE = 1
 | `NBINS_HEAD` | Number of bins for the head histogram |
 | `LOGARITHMIC_SCALE` | `1` for log y-axis, `0` for linear |
 
-### 3. Run in MATLAB
+### 4. Run in MATLAB
 
-Navigate to the `histogram/` directory and run:
+Open MATLAB, navigate to the cloned directory, and run:
 
 ```matlab
 >> et_histogram   % for execution time (ns)
 >> ec_histogram   % for execution cycles
 ```
 
-### 4. Output
+## Output
 
 **Figures (5 per script):**
 
@@ -91,13 +102,13 @@ The exported file contains all loaded samples with an added `scenario_name` colu
 ## File Structure
 
 ```
-histogram/
+histogram-tool/
 ├── histogram.config    # Configuration file
 ├── read_config.m       # Config file parser
 ├── et_histogram.m      # Execution time analysis (ns)
 ├── ec_histogram.m      # Execution cycle analysis (cycles)
 ├── README.md
-└── samples/            # Input CSV files and exported datasets
+└── samples/            # Input CSV files and exported datasets (not tracked by git)
     ├── SCENARIO-00-et_log.csv
     ├── ...
     └── <ddmmyy>/       # Auto-created date folders for exports
