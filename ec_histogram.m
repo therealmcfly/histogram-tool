@@ -26,11 +26,8 @@ end
 
 % Predefine table structure
 all_ec = table( ...
-    [], [], [], {}, ...
-    'VariableNames', {'ec','state','scenario','scenario_name'} );
-
-scenario_map = containers.Map();
-scenario_count = 0;
+    [], [], {}, ...
+    'VariableNames', {'ec','state','scenario'} );
 
 for k = 1:numel(files)
     fname = fullfile(samples_folder, files(k).name);
@@ -46,19 +43,11 @@ for k = 1:numel(files)
     tokens = regexp(files(k).name, '^([^-]+)', 'tokens');
     scenario_name = upper(tokens{1}{1});
 
-    % Assign consistent scenario ID per name
-    if ~scenario_map.isKey(scenario_name)
-        scenario_count = scenario_count + 1;
-        scenario_map(scenario_name) = scenario_count;
-    end
-    scenario_id = scenario_map(scenario_name);
-
     sub = table( ...
         T.cycles, ...
         T.state, ...
-        repmat(scenario_id, height(T), 1), ...
         repmat({scenario_name}, height(T), 1), ...
-        'VariableNames', {'ec','state','scenario','scenario_name'} );
+        'VariableNames', {'ec','state','scenario'} );
 
     all_ec = [all_ec; sub];
 end
@@ -126,9 +115,8 @@ scenarios = unique(all_ec.scenario);
 
 figure;
 for i = 1:numel(scenarios)
-    sc = scenarios(i);
-    ec_sc = all_ec.ec(all_ec.scenario == sc);
-    sc_name = all_ec.scenario_name{find(all_ec.scenario == sc, 1)};
+    sc_name = scenarios{i};
+    ec_sc = all_ec.ec(strcmp(all_ec.scenario, sc_name));
 
     wcec_sc = max(ec_sc);
 
