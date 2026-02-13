@@ -1,0 +1,104 @@
+# Execution Timing Histogram Analysis
+
+A set of MATLAB scripts that visualise execution time and execution cycle distributions from measurement data. The scripts read CSV sample files, generate histogram figures for overall, head (fastest), tail (slowest), per-scenario, and per-state distributions, and export a consolidated dataset.
+
+All parameters -- platform name, cutoff thresholds, bin counts, and display options -- are configured through a single `histogram.config` file. The scripts support any number of scenarios and automatically merge samples that share the same scenario name.
+
+## How to Use
+
+### 1. Prepare the `samples/` folder
+
+Create a `samples/` folder inside `histogram/` and place your CSV files in it. Each CSV must contain the following columns:
+
+| Column | Required by | Description |
+|--------|-------------|-------------|
+| `state` | Both scripts | State identifier (integer) |
+| `et_ns` | `et_histogram.m` | Execution time in nanoseconds |
+| `cycles` | `ec_histogram.m` | Execution cycle count |
+
+Additional columns are ignored.
+
+**Filename convention:** The scenario name is derived from the part of the filename before the first `-`. For example:
+
+- `NORMAL-00-et_log.csv` --> scenario **NORMAL**
+- `NORMAL-01-et_log.csv` --> scenario **NORMAL** (merged with the above)
+- `BACK-00-et_log.csv` --> scenario **BACK**
+
+Files with the same prefix are combined into a single scenario.
+
+### 2. Edit `histogram.config`
+
+Set the parameters for your platform and data:
+
+```
+PLATFORM_NAME = ARM
+
+# Execution Cycle (EC) cutoffs
+EC_TAIL_CUTOFF = 40000
+EC_HEAD_CUTOFF = 3472
+
+# Execution Time (ET) cutoffs
+ET_TAIL_CUTOFF = 40000
+ET_HEAD_CUTOFF = 3472
+
+# Histogram bins
+NBINS_MAIN = 50
+NBINS_TAIL = 20
+NBINS_HEAD = 20
+
+# Display
+LOGARITHMIC_SCALE = 1
+```
+
+| Parameter | Description |
+|-----------|-------------|
+| `PLATFORM_NAME` | Platform identifier used in exported filenames |
+| `EC_TAIL_CUTOFF` / `ET_TAIL_CUTOFF` | Threshold for the tail (slow) distribution |
+| `EC_HEAD_CUTOFF` / `ET_HEAD_CUTOFF` | Threshold for the head (fast) distribution |
+| `NBINS_MAIN` | Number of bins for the overall histogram |
+| `NBINS_TAIL` | Number of bins for the tail histogram |
+| `NBINS_HEAD` | Number of bins for the head histogram |
+| `LOGARITHMIC_SCALE` | `1` for log y-axis, `0` for linear |
+
+### 3. Run in MATLAB
+
+Navigate to the `histogram/` directory and run:
+
+```matlab
+>> et_histogram   % for execution time (ns)
+>> ec_histogram   % for execution cycles
+```
+
+### 4. Output
+
+**Figures (5 per script):**
+
+1. **Overall distribution** -- full dataset with best-case and worst-case marked
+2. **Head of distribution** -- samples below the head cutoff
+3. **Tail of distribution** -- samples above the tail cutoff
+4. **By scenario** -- one subplot per scenario
+5. **By state** -- one subplot per state
+
+**Exported CSV:**
+
+A consolidated CSV is saved to `samples/<ddmmyy>/` with the format:
+
+- `<PLATFORM>_all_et_samples_n<count>_<timestamp>.csv`
+- `<PLATFORM>_all_ec_samples_n<count>_<timestamp>.csv`
+
+The exported file contains all loaded samples with an added `scenario_name` column.
+
+## File Structure
+
+```
+histogram/
+├── histogram.config    # Configuration file
+├── read_config.m       # Config file parser
+├── et_histogram.m      # Execution time analysis (ns)
+├── ec_histogram.m      # Execution cycle analysis (cycles)
+├── README.md
+└── samples/            # Input CSV files and exported datasets
+    ├── SCENARIO-00-et_log.csv
+    ├── ...
+    └── <ddmmyy>/       # Auto-created date folders for exports
+```
