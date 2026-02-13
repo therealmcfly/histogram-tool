@@ -14,7 +14,7 @@ NBINS_HEAD        = cfg.NBINS_HEAD;
 LOGARITHMIC_SCALE = cfg.LOGARITHMIC_SCALE;
 
 %% Data Initialization
-samples_folder = 'samples';
+samples_folder = fullfile('..', 'samples');
 if ~exist(samples_folder, 'dir')
     error('Samples folder "%s" does not exist.', samples_folder);
 end
@@ -69,7 +69,7 @@ if isempty(all_et)
 end
 
 %% Export combined CSV
-out_dir = fullfile(samples_folder, datestr(now, 'ddmmyy'));
+out_dir = fullfile('used-samples', datestr(now, 'ddmmyy'));
 if ~exist(out_dir, 'dir'), mkdir(out_dir); end
 out_name = fullfile(out_dir, sprintf('%s_all_et_samples_n%d_%s.csv', PLATFORM_NAME, height(all_et), datestr(now, 'yyyymmdd_HHMMSS')));
 writetable(all_et, out_name);

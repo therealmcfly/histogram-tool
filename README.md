@@ -13,13 +13,24 @@ git clone git@github.com:therealmcfly/histogram-tool.git
 cd histogram-tool
 ```
 
-### 2. Create the `samples/` folder and add your data
+### 2. Place your sample data in `../samples/`
 
-```bash
-mkdir samples
+The scripts read CSV files from a `samples/` folder one level above the repository directory:
+
+```
+parent-directory/
+├── samples/                    # Your CSV sample files go here
+│   ├── NORMAL-00-et_log.csv
+│   ├── NORMAL-01-et_log.csv
+│   ├── BACK-00-et_log.csv
+│   └── ...
+└── histogram-tool/             # This repository
+    ├── ec_histogram.m
+    ├── et_histogram.m
+    └── ...
 ```
 
-Place your CSV files in `samples/`. Each CSV must contain the following columns:
+Each CSV must contain the following columns:
 
 | Column | Required by | Description |
 |--------|-------------|-------------|
@@ -73,7 +84,7 @@ LOGARITHMIC_SCALE = 1
 
 ### 4. Run in MATLAB
 
-Open MATLAB, navigate to the cloned directory, and run:
+Open MATLAB, navigate to the `histogram-tool/` directory, and run:
 
 ```matlab
 >> et_histogram   % for execution time (ns)
@@ -92,7 +103,7 @@ Open MATLAB, navigate to the cloned directory, and run:
 
 **Exported CSV:**
 
-A consolidated CSV is saved to `samples/<ddmmyy>/` with the format:
+A consolidated CSV is saved to `used-samples/<ddmmyy>/` with the format:
 
 - `<PLATFORM>_all_et_samples_n<count>_<timestamp>.csv`
 - `<PLATFORM>_all_ec_samples_n<count>_<timestamp>.csv`
@@ -102,14 +113,14 @@ The exported file contains all loaded samples with an added `scenario_name` colu
 ## File Structure
 
 ```
-histogram-tool/
-├── histogram.config    # Configuration file
-├── read_config.m       # Config file parser
-├── et_histogram.m      # Execution time analysis (ns)
-├── ec_histogram.m      # Execution cycle analysis (cycles)
-├── README.md
-└── samples/            # Input CSV files and exported datasets (not tracked by git)
-    ├── SCENARIO-00-et_log.csv
-    ├── ...
-    └── <ddmmyy>/       # Auto-created date folders for exports
+parent-directory/
+├── samples/                    # Input CSV files (external to repo)
+└── histogram-tool/             # This repository
+    ├── histogram.config        # Configuration file
+    ├── read_config.m           # Config file parser
+    ├── et_histogram.m          # Execution time analysis (ns)
+    ├── ec_histogram.m          # Execution cycle analysis (cycles)
+    ├── README.md
+    └── used-samples/           # Exported datasets (not tracked by git)
+        └── <ddmmyy>/
 ```

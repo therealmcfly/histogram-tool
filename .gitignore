@@ -1,5 +1,5 @@
 # MATLAB autosave files
 *.asv
 
-# Sample data and generated datasets
-samples/
+# Generated datasets
+used-samples/
