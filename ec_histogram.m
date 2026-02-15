@@ -82,9 +82,9 @@ end
 
 xlabel('Execution cycle');
 ylabel('Count');
-title(sprintf('Overall Execution Cycle Distribution (n = %d, BCEC = %d, WCEC = %d)', height(all_ec), bcec, global_wcec));
+title(sprintf('Execution Cycle Distribution on %s\n(n = %d, Best-Case = %d, Worst-Case = %d)', PLATFORM_NAME, height(all_ec), bcec, global_wcec));
 grid on;
-xline(global_wcec, 'r', 'LineWidth', 2, 'Label', 'WCEC');
+xline(global_wcec, 'r', 'LineWidth', 2, 'Label', 'Worst-Case');
 
 %% 2. Head histogram
 head_samples = all_ec.ec(all_ec.ec <= HEAD_CUTOFF);
@@ -95,9 +95,9 @@ figure;
 histogram(head_samples, NBINS_HEAD);
 xlabel('Execution cycle');
 ylabel('Frequency');
-title(sprintf('Head of Distribution (\\leq %d, n = %d, BCEC = %d)', HEAD_CUTOFF, numel(head_samples), bcec));
+title(sprintf('Head of Distribution (\\leq %d, n = %d, Best-Case = %d)', HEAD_CUTOFF, numel(head_samples), bcec));
 grid on;
-xline(bcec, 'g', 'LineWidth', 2, 'Label', 'BCEC');
+xline(bcec, 'g', 'LineWidth', 2, 'Label', 'Best-Case');
 
 %% 3. Tail histogram
 tail_samples = all_ec.ec(all_ec.ec > TAIL_CUTOFF);
@@ -106,9 +106,9 @@ figure;
 histogram(tail_samples, NBINS_TAIL);
 xlabel('Execution cycle');
 ylabel('Frequency');
-title(sprintf('Tail of Distribution (> %d, n = %d, WCEC = %d)', TAIL_CUTOFF, numel(tail_samples), global_wcec));
+title(sprintf('Tail of Distribution (> %d, n = %d, Worst-Case = %d)', TAIL_CUTOFF, numel(tail_samples), global_wcec));
 grid on;
-xline(global_wcec, 'r', 'LineWidth', 2, 'Label', 'WCEC');
+xline(global_wcec, 'r', 'LineWidth', 2, 'Label', 'Worst-Case');
 
 %% 4. Histograms by scenario
 scenarios = unique(all_ec.scenario);
@@ -129,10 +129,10 @@ for i = 1:numel(scenarios)
 
     xlabel('Execution cycle');
     ylabel('Frequency');
-    title(sprintf('%s (WCEC = %d)', sc_name, wcec_sc));
+    title(sprintf('%s (Worst-Case = %d)', sc_name, wcec_sc));
     grid on;
 
-    xline(wcec_sc, 'r', 'LineWidth', 2, 'Label', 'WCEC');
+    xline(wcec_sc, 'r', 'LineWidth', 2, 'Label', 'Worst-Case');
 end
 sgtitle('Execution Cycle by Scenario');
 
@@ -156,10 +156,10 @@ for i = 1:numel(states)
 
     xlabel('Execution cycle');
     ylabel('Frequency');
-    title(sprintf('%s (WCEC = %d)', ...
+    title(sprintf('%s (Worst-Case = %d)', ...
         state_names{st+1}, wcec_st));
     grid on;
 
-    xline(wcec_st, 'r', 'LineWidth', 2, 'Label', 'WCEC');
+    xline(wcec_st, 'r', 'LineWidth', 2, 'Label', 'Worst-Case');
 end
 sgtitle('Execution Cycle by State');

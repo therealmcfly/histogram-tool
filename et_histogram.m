@@ -82,9 +82,9 @@ end
 
 xlabel('Execution time (ns)');
 ylabel('Count');
-title(sprintf('Overall Execution Time Distribution (n = %d, BCET = %d, WCET = %d)', height(all_et), bcet, global_wcet));
+title(sprintf('Execution Time Distribution on %s\n(n = %d, Best-Case = %d, Worst-Case = %d)', PLATFORM_NAME, height(all_et), bcet, global_wcet));
 grid on;
-xline(global_wcet, 'r', 'LineWidth', 2, 'Label', 'WCET');
+xline(global_wcet, 'r', 'LineWidth', 2, 'Label', 'Worst-Case');
 
 %% 2. Head histogram
 head_samples = all_et.et(all_et.et <= HEAD_CUTOFF);
@@ -95,9 +95,9 @@ figure;
 histogram(head_samples, NBINS_HEAD);
 xlabel('Execution time (ns)');
 ylabel('Frequency');
-title(sprintf('Head of Distribution (\\leq %d, n = %d, BCET = %d)', HEAD_CUTOFF, numel(head_samples), bcet));
+title(sprintf('Head of Distribution (\\leq %d, n = %d, Best-Case = %d)', HEAD_CUTOFF, numel(head_samples), bcet));
 grid on;
-xline(bcet, 'g', 'LineWidth', 2, 'Label', 'BCET');
+xline(bcet, 'g', 'LineWidth', 2, 'Label', 'Best-Case');
 
 %% 3. Tail histogram
 tail_samples = all_et.et(all_et.et > TAIL_CUTOFF);
@@ -106,9 +106,9 @@ figure;
 histogram(tail_samples, NBINS_TAIL);
 xlabel('Execution time (ns)');
 ylabel('Frequency');
-title(sprintf('Tail of Distribution (> %d, n = %d, WCET = %d)', TAIL_CUTOFF, numel(tail_samples), global_wcet));
+title(sprintf('Tail of Distribution (> %d, n = %d, Worst-Case = %d)', TAIL_CUTOFF, numel(tail_samples), global_wcet));
 grid on;
-xline(global_wcet, 'r', 'LineWidth', 2, 'Label', 'WCET');
+xline(global_wcet, 'r', 'LineWidth', 2, 'Label', 'Worst-Case');
 
 %% 4. Histograms by scenario
 scenarios = unique(all_et.scenario);
@@ -129,10 +129,10 @@ for i = 1:numel(scenarios)
 
     xlabel('Execution time (ns)');
     ylabel('Frequency');
-    title(sprintf('%s (WCET = %d)', sc_name, wcet_sc));
+    title(sprintf('%s (Worst-Case = %d)', sc_name, wcet_sc));
     grid on;
 
-    xline(wcet_sc, 'r', 'LineWidth', 2, 'Label', 'WCET');
+    xline(wcet_sc, 'r', 'LineWidth', 2, 'Label', 'Worst-Case');
 end
 sgtitle('Execution Time by Scenario');
 
@@ -156,10 +156,10 @@ for i = 1:numel(states)
 
     xlabel('Execution time (ns)');
     ylabel('Frequency');
-    title(sprintf('%s (WCET = %d)', ...
+    title(sprintf('%s (Worst-Case = %d)', ...
         state_names{st+1}, wcet_st));
     grid on;
 
-    xline(wcet_st, 'r', 'LineWidth', 2, 'Label', 'WCET');
+    xline(wcet_st, 'r', 'LineWidth', 2, 'Label', 'Worst-Case');
 end
 sgtitle('Execution Time by State');
