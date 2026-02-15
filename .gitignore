@@ -3,3 +3,6 @@
 
 # Generated datasets
 used-samples/
+
+# User configuration
+.config

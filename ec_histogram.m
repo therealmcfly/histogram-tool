@@ -4,7 +4,7 @@ clc
 close all
 
 %% Configuration
-cfg = read_config('histogram.config');
+cfg = read_config('.config');
 PLATFORM_NAME     = cfg.PLATFORM_NAME;
 TAIL_CUTOFF       = cfg.EC_TAIL_CUTOFF;
 HEAD_CUTOFF       = cfg.EC_HEAD_CUTOFF;
@@ -12,6 +12,10 @@ NBINS_MAIN        = cfg.NBINS_MAIN;
 NBINS_TAIL        = cfg.NBINS_TAIL;
 NBINS_HEAD        = cfg.NBINS_HEAD;
 LOGARITHMIC_SCALE = cfg.LOGARITHMIC_SCALE;
+SHOW_COUNT        = cfg.SHOW_COUNT;
+SHOW_BEST_CASE    = cfg.SHOW_BEST_CASE;
+SHOW_WORST_CASE   = cfg.SHOW_WORST_CASE;
+SHOW_AVERAGE      = cfg.SHOW_AVERAGE;
 
 %% Data Initialization
 samples_folder = fullfile('..', 'samples');
@@ -82,7 +86,19 @@ end
 
 xlabel('Execution cycle');
 ylabel('Count');
-title(sprintf('Execution Cycle Distribution on %s\n(n = %d, Best-Case = %d, Worst-Case = %d)', PLATFORM_NAME, height(all_ec), bcec, global_wcec));
+
+% Build title subtitle from config toggles
+stats = {};
+if SHOW_COUNT,     stats{end+1} = sprintf('n = %d', height(all_ec)); end
+if SHOW_BEST_CASE, stats{end+1} = sprintf('Best-Case = %d', bcec); end
+if SHOW_WORST_CASE,stats{end+1} = sprintf('Worst-Case = %d', global_wcec); end
+if SHOW_AVERAGE,   stats{end+1} = sprintf('Average = %.0f', mean(all_ec.ec)); end
+
+if ~isempty(stats)
+    title(sprintf('Execution Cycle Distribution on %s\n(%s)', PLATFORM_NAME, strjoin(stats, ', ')));
+else
+    title(sprintf('Execution Cycle Distribution on %s', PLATFORM_NAME));
+end
 grid on;
 xline(global_wcec, 'r', 'LineWidth', 2, 'Label', 'Worst-Case');
 
